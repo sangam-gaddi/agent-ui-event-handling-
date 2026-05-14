@@ -41,7 +41,7 @@ i { font-size: 24px; color: var(--color-gray); }
 
 /* ── FLOATING BUTTONS ── */
 .float-actions {
-  position: fixed; top: 32px; right: 1.5em; z-index: 999;
+  position: fixed; top: 32px; right: 1.5em; z-index: 800;
   display: flex; gap: .5em;
 }
 .fab-btn {
