@@ -326,5 +326,60 @@ li a span { color: var(--color-gray); padding-left: .25em; }
 #sketch-canvas { flex: 1; display: block; cursor: crosshair; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 1100px) { .search-modal { width: 55%; } .output-panel.open { width: 38%; } }
-@media (max-width: 800px)  { .search { flex-direction: column; align-items: center; margin-top: 4em; } .search-modal { width: 92%; } .output-panel.open { width: 92%; } }
+@media (max-width: 1100px) {
+  .search-modal { width: 50%; }
+  .output-panel.open { width: 45%; }
+}
+@media (max-width: 850px) {
+  .search { 
+    margin-top: 4.5em; 
+    padding: 0 1em;
+    position: relative; /* for absolute positioning of output panel */
+  }
+  .search-modal { 
+    width: 100%; 
+    max-height: calc(100vh - 5.5em);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .output-panel { 
+    position: absolute; 
+    top: 0; left: 1em; 
+    max-height: calc(100vh - 5.5em);
+    z-index: 100;
+  }
+  .output-panel.open { 
+    width: calc(100% - 2em); 
+  }
+  .search:has(.output-panel.open) .search-modal {
+    opacity: 0.05;
+    pointer-events: none;
+    transform: scale(0.98);
+  }
+  .calc-panel {
+    width: 100%;
+    right: -100%;
+  }
+  .float-actions {
+    top: 2.5em;
+    right: 1em;
+  }
+  .fab-btn {
+    font-size: 0; /* hide text on mobile, keep icons */
+    padding: 0.5em 0.6em;
+  }
+  .fab-btn i {
+    font-size: 20px;
+  }
+  .q-action p { font-size: 14px; }
+  .f-item p { font-size: 12.5px; }
+}
+@media (max-width: 480px) {
+  .search { padding: 0 0.5em; margin-top: 4em; }
+  .output-panel { left: 0.5em; }
+  .output-panel.open { width: calc(100% - 1em); }
+  .tags { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .tags::-webkit-scrollbar { display: none; }
+  .tag { flex-shrink: 0; }
+  .search-items-container p, .f-header { padding: 0.75em; }
+  .quick-actions .q-action { padding: 0.5em 0.75em; }
+}

@@ -100,3 +100,10 @@ a:hover { color: #fff; }
   border-color: rgba(255,255,255,0.5);
   background: rgba(255,255,255,0.05);
 }
+
+@media (max-width: 600px) {
+  .nav, .footer { flex-direction: column; align-items: center; gap: 1em; padding: 1.5em; }
+  .links { flex-wrap: wrap; justify-content: center; gap: 1em; font-size: 0.9rem; }
+  .hero-copy h1 { font-size: 14vw; }
+  .hero-copy p { font-size: 3.5vw; }
+}
