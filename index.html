@@ -56,7 +56,12 @@
         onComplete: function () {
           // Fade whole page out then go to agent UI
           gsap.to("body", { duration: 0.4, opacity: 0, onComplete: function () {
-            window.location.href = "agent.html";
+            // Redirect to GitHub Pages if opened locally (especially useful for mobile)
+            if (window.location.protocol === 'file:') {
+              window.location.href = "https://sangam-gaddi.github.io/agent-ui-event-handling-/";
+            } else {
+              window.location.href = "agent.html";
+            }
           }});
         }
       });
