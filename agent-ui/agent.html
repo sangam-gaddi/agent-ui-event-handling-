@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Agent Task Configurator | 22UIS601C</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="agent.css" />
+  </head>
+  <body>
+    <div class="event-log" id="event-log">
+      <span class="event-dot"></span>
+      <span id="event-text">Waiting for interaction...</span>
+    </div>
+    <div class="float-actions">
+      <button class="fab-btn" id="calc-toggle-btn"><i class="ph ph-calculator"></i> Calculators</button>
+      <button class="fab-btn accent" id="canvas-toggle-btn"><i class="ph ph-pencil-simple"></i> Draw</button>
+      <a class="fab-btn ghost" href="https://github.com/sangam-gaddi/agent-ui-event-handling-.git" target="_blank" title="View source on GitHub" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 32px; padding: 0;">
+        <i class="ph ph-github-logo"></i>
+      </a>
+    </div>
+
+    <div class="search" id="search-wrapper">
+      <div class="search-modal">
+        <div class="search-bar" id="agent-input-bar">
+          <div class="search-icon"><i class="ph ph-chat-teardrop-text"></i></div>
+          <div class="input">
+            <input type="text" id="search-input" placeholder="Message your AI agent..." maxlength="300" autocomplete="off" />
+          </div>
+          <div class="action-icons">
+            <div class="char-pill" id="char-pill">0</div>
+            <div class="filter-icon"><i class="ph ph-sliders-horizontal"></i></div>
+            <div class="cmd-icon"><img src="./assets/cmd-f.png" alt="cmd" /></div>
+          </div>
+        </div>
+        <div class="tags-container">
+          <span>Active Agent:</span>
+          <div class="tags">
+            <div class="tag active-tag" id="tag-voice" data-agent="voice" data-color="#8b5cf6"><i class="ph ph-microphone"></i><p>Voice Agent</p><i class="ph-thin ph-x"></i></div>
+            <div class="tag" id="tag-image" data-agent="image" data-color="#ec4899"><i class="ph ph-image"></i><p>Image Analyzer</p><i class="ph-thin ph-x"></i></div>
+            <div class="tag" id="tag-code" data-agent="code" data-color="#10b981"><i class="ph ph-code"></i><p>Code Copilot</p><i class="ph-thin ph-x"></i></div>
+          </div>
+        </div>
+        <div class="search-items-container">
+          <p>Conversation &nbsp;&nbsp;<span id="msg-count">3</span></p>
+          <ul id="search-items">
+            <li draggable="true" data-id="1">
+              <div class="user" id="avatar-1"></div>
+              <a href="#">Voice Agent <span>Transcribed 2m 14s of audio — confidence 97.3%</span></a>
+              <div class="item-icons"><div class="icon"><i class="ph ph-chat-teardrop-text"></i></div><div class="icon"><i class="ph ph-list-plus"></i></div></div>
+            </li>
+            <li draggable="true" data-id="2">
+              <div class="user" id="avatar-2"></div>
+              <a href="#">Image Analyzer <span>Detected 6 objects · 2 faces · sentiment: positive</span></a>
+              <div class="item-icons"><div class="icon"><i class="ph ph-list-plus"></i></div></div>
+            </li>
+            <li draggable="true" data-id="3">
+              <div class="user" id="avatar-3"></div>
+              <a href="#">Code Copilot <span>Generated 42 lines · TypeScript · O(n log n)</span></a>
+              <div class="item-icons"><div class="icon"><i class="ph ph-envelope-simple"></i></div><div class="icon"><i class="ph ph-list-plus"></i></div></div>
+            </li>
+          </ul>
+        </div>
+        <div class="quick-actions">
+          <div class="q-action q-header"><span>Agent Commands</span></div>
+          <div class="q-action" id="cmd-analyze" data-cmd="Analyze this image in detail"><div class="icon"><i class="ph ph-image-square"></i></div><div class="action"><p>Analyze Image</p></div><div class="key"><span>A</span></div></div>
+          <div class="q-action" id="cmd-run" data-cmd="Run and explain this code snippet"><div class="icon"><i class="ph ph-terminal-window"></i></div><div class="action"><p>Run Code</p></div><div class="key"><span>R</span></div></div>
+          <div class="q-action" id="cmd-summarize" data-cmd="Summarize this text in 3 bullet points"><div class="icon"><i class="ph ph-text-align-left"></i></div><div class="action"><p>Summarize Text</p></div><div class="key"><span>S</span></div></div>
+        </div>
+        <div class="file">
+          <div class="f-header"><p>Task Queue &nbsp;&nbsp;<span id="queue-count">1</span></p></div>
+          <div id="task-queue-list">
+            <div class="f-item" draggable="true" data-id="q1">
+              <div class="icon"><i class="ph ph-queue"></i></div>
+              <div class="file-item"><p>Initial Prompt<span>.task</span></p><p><i class="ph ph-checks"></i></p></div>
+              <div class="btn"><i class="ph-bold ph-share-fat"></i><span>Run</span></div>
+            </div>
+          </div>
+          <form id="task-form" novalidate>
+            <button type="submit" class="submit-btn" id="send-btn"><i class="ph ph-paper-plane-tilt"></i> Send to Agent</button>
+          </form>
+        </div>
+      </div><!-- end .search-modal -->
+
+      <!-- Gemini-style output panel -->
+      <div class="output-panel" id="output-panel">
+        <div class="output-header">
+          <div class="output-agent-info">
+            <div class="output-orb" id="output-orb"></div>
+            <span id="output-agent-name">Voice Agent</span>
+            <span class="gen-badge" id="gen-badge">Generating...</span>
+          </div>
+          <div class="output-top-actions">
+            <button class="out-btn" id="copy-btn" title="Copy"><i class="ph ph-copy"></i></button>
+            <button class="out-btn" id="close-output-btn" title="Close"><i class="ph ph-x"></i></button>
+          </div>
+        </div>
+        <div class="output-body" id="output-body">
+          <div class="thinking-dots" id="thinking-dots"><span></span><span></span><span></span></div>
+          <div class="output-text" id="output-text"></div>
+        </div>
+        <div class="output-footer">
+          <span class="output-meta" id="output-meta"></span>
+          <button class="regen-btn" id="regen-btn"><i class="ph ph-arrow-clockwise"></i> Regenerate</button>
+        </div>
+      </div>
+    </div><!-- end .search -->
+
+    <!-- Calculator panel -->
+    <aside class="calc-panel" id="calc-panel">
+      <div class="calc-header"><i class="ph ph-calculator"></i><span>Offline Calculators</span><button id="calc-close"><i class="ph ph-x"></i></button></div>
+      <div class="calc-section"><h3><i class="ph ph-coins"></i> Token Counter</h3><div class="calc-result"><span class="big-num" id="token-count">0</span><span class="unit">est. tokens</span></div><p class="calc-note">≈ chars ÷ 4 (GPT-4 estimate)</p></div>
+      <div class="calc-section"><h3><i class="ph ph-timer"></i> Response Time</h3><div class="calc-result"><span class="big-num" id="time-count">0.0</span><span class="unit">seconds</span></div><p class="calc-note">tokens × 20ms + 300ms base</p></div>
+      <div class="calc-section"><h3><i class="ph ph-chart-bar"></i> Complexity Score</h3><div class="calc-result"><span class="big-num complexity-badge" id="complexity-label">—</span></div><div class="complexity-bar-wrap"><div class="complexity-bar" id="complexity-bar"></div></div><p class="calc-note">Based on word length &amp; vocabulary</p></div>
+      <div class="calc-section"><h3><i class="ph ph-hash"></i> Word Stats</h3><div class="stats-grid"><div class="stat-item"><span id="word-count">0</span><em>words</em></div><div class="stat-item"><span id="unique-count">0</span><em>unique</em></div><div class="stat-item"><span id="sent-count">0</span><em>sentences</em></div><div class="stat-item"><span id="avg-len">0</span><em>avg len</em></div></div></div>
+    </aside>
+
+    <!-- Canvas modal -->
+    <div class="canvas-overlay" id="canvas-overlay">
+      <div class="canvas-header">
+        <span><i class="ph ph-pencil-simple"></i> Agent Sketchpad — Draw to Think</span>
+        <div style="display:flex;gap:.75em;align-items:center;">
+          <button class="canvas-clear-btn" id="canvas-clear-btn"><i class="ph ph-eraser"></i> Clear</button>
+          <a href="canvas.html" target="_blank" class="canvas-open-btn"><i class="ph ph-arrow-square-out"></i> Full Screen</a>
+          <button class="canvas-close-btn" id="canvas-close-btn"><i class="ph ph-x"></i></button>
+        </div>
+      </div>
+      <canvas id="sketch-canvas"></canvas>
+    </div>
+    <script src="agent.js"></script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AI Agent Task Configurator — BEC Bagalkote, Full Stack Development 22UIS601C" />
+    <title>AI Agent Task Configurator | BEC Bagalkote</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <!-- Loading counter -->
+    <h1 class="counter">0</h1>
+
+    <!-- Block reveal bars -->
+    <div class="overlay">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/gsap.min.js"></script>
+    <script>
+      // Count 0 → 100
+      (function startLoader() {
+        var el = document.querySelector(".counter");
+        var val = 0;
+        function tick() {
+          if (val === 100) return;
+          val += Math.floor(Math.random() * 10) + 1;
+          if (val > 100) val = 100;
+          el.textContent = val;
+          setTimeout(tick, Math.floor(Math.random() * 200) + 50);
+        }
+        tick();
+      })();
+
+      // Fade out counter, collapse bars, then redirect
+      gsap.to(".counter", 0.25, { delay: 3.5, opacity: 0 });
+
+      gsap.to(".bar", 1.5, {
+        delay: 3.5,
+        height: 0,
+        stagger: { amount: 0.5 },
+        ease: "power4.inOut",
+        onComplete: function () {
+          // Fade whole page out then go to agent UI
+          gsap.to("body", { duration: 0.4, opacity: 0, onComplete: function () {
+            window.location.href = "agent.html";
+          }});
+        }
+      });
+    </script>
+  </body>
+</html>
